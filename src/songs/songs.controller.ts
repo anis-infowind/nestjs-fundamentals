@@ -42,6 +42,7 @@ export class SongsController {
   findOne(
     @Param(
       'id',
+       //ParseIntPipe,
       new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE}),
     ) id: number): string {
     return `Song details by ID: ${id} ${typeof id}`;
