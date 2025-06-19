@@ -9,6 +9,7 @@ export class SongsService {
     return 'Song created successfully';
   }
   findAll(): any[] {
+    //throw new Error('Error in findAll');
     return this.songs;
   }
 }
