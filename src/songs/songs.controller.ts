@@ -19,7 +19,7 @@ import { Connection } from 'src/common/constants/connection';
 
 @Controller({
   path: 'songs',
-  scope: Scope.DEFAULT
+  scope: Scope.REQUEST
 })
 export class SongsController {
   constructor(
