@@ -10,17 +10,31 @@ import {
   Body,
   HttpException,
   ForbiddenException,
+  Inject,
+  Scope,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
+import { Connection } from 'src/common/constants/connection';
 
-@Controller('songs')
+@Controller({
+  path: 'songs',
+  scope: Scope.REQUEST
+})
 export class SongsController {
-  constructor(private readonly songsService: SongsService) {}
+  constructor(
+    private readonly songsService: SongsService,
+    @Inject('CONNECTION')
+    private connection: Connection,
+  ) {
+    console.log(
+      `THIS IS CONNECTION STRING ${this.connection.CONNECTION_STRING}`,
+    );
+  }
   @Post()
-  create(
+  async create(
     @Body() createSongDTO: CreateSongDTO,
-  ): string {
+  ): Promise<string> {
     return this.songsService.create(createSongDTO);
   }
   @Get()
@@ -40,6 +54,10 @@ export class SongsController {
   }
   @Get(':id')
   findOne(
+    // option 1
+    // @Param('id', ParseIntPipe) id: number) {
+    //   return `Song details by ID: ${id} ${typeof id}`;
+    // }
     @Param(
       'id',
        //ParseIntPipe,
@@ -48,11 +66,15 @@ export class SongsController {
     return `Song details by ID: ${id} ${typeof id}`;
   }
   @Put(':id')
-  update(): string {
-    return 'Update song by ID';
+  update(
+    @Param('id', ParseIntPipe) id: number
+  ): string {
+    return `Update song by ID: ${id} ${typeof id}`;
   }
   @Delete(':id')
-  remove(): string {
-    return 'Delete song by ID';
+  async remove(
+    @Param('id', ParseIntPipe) id:number
+  ): Promise<string> {
+    return `Delete song by ID: ${id} ${typeof id}`;
   }
 }
