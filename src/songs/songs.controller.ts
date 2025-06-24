@@ -12,6 +12,8 @@ import {
   ForbiddenException,
   Inject,
   Scope,
+  DefaultValuePipe,
+  Query,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
@@ -19,6 +21,7 @@ import { Connection } from 'src/common/constants/connection';
 import { Song } from './song.entity';
 import { UpdateSongDto } from './dto/update-song-dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller({
   path: 'songs',
@@ -41,9 +44,21 @@ export class SongsController {
     return this.songsService.create(createSongDTO);
   }
   @Get()
-  findAll(): Promise<Song[]> {
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
+    limit = 10,
+    @Query('orderBy') orderBy?: string,
+    @Query('order', new DefaultValuePipe('DESC')) order: 'ASC' | 'DESC' = 'DESC',
+  ): Promise<Pagination<Song>> {
     try {
-      return this.songsService.findAll();
+      limit = limit > 100 ? 100 : limit;
+      //return this.songsService.findAll();
+      return this.songsService.paginate({
+        page,
+        limit,
+      }, orderBy, order);
     } catch (error) {
       /* throw new ForbiddenException() is a built-in exception that can be used to throw a forbidden error */
       // throw new ForbiddenException();
