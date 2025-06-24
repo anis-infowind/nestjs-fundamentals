@@ -16,6 +16,9 @@ import {
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { Connection } from 'src/common/constants/connection';
+import { Song } from './song.entity';
+import { UpdateSongDto } from './dto/update-song-dto';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller({
   path: 'songs',
@@ -34,13 +37,13 @@ export class SongsController {
   @Post()
   async create(
     @Body() createSongDTO: CreateSongDTO,
-  ): Promise<string> {
+  ): Promise<Song> {
     return this.songsService.create(createSongDTO);
   }
   @Get()
-  findAll(): string[] {
+  findAll(): Promise<Song[]> {
     try {
-      return this.songsService.findAll() as string[];
+      return this.songsService.findAll();
     } catch (error) {
       /* throw new ForbiddenException() is a built-in exception that can be used to throw a forbidden error */
       // throw new ForbiddenException();
@@ -53,7 +56,7 @@ export class SongsController {
     }
   }
   @Get(':id')
-  findOne(
+  async findOne(
     // option 1
     // @Param('id', ParseIntPipe) id: number) {
     //   return `Song details by ID: ${id} ${typeof id}`;
@@ -62,19 +65,27 @@ export class SongsController {
       'id',
        //ParseIntPipe,
       new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE}),
-    ) id: number): string {
-    return `Song details by ID: ${id} ${typeof id}`;
+    ) id: number): Promise<Song | null> {
+      const song = await this.songsService.findOne(id);
+      if (!song) {
+        throw new HttpException({
+          status: HttpStatus.NOT_FOUND,
+          error: 'Song not found',
+        }, HttpStatus.NOT_FOUND);
+      }
+      return song;
   }
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number
-  ): string {
-    return `Update song by ID: ${id} ${typeof id}`;
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSongDTO: UpdateSongDto,
+  ): Promise<UpdateResult> {
+    return await this.songsService.update(id, updateSongDTO);
   }
   @Delete(':id')
   async remove(
     @Param('id', ParseIntPipe) id:number
-  ): Promise<string> {
-    return `Delete song by ID: ${id} ${typeof id}`;
+  ): Promise<DeleteResult> {
+    return await this.songsService.remove(id);
   }
 }

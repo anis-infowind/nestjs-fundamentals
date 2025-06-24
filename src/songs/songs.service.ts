@@ -1,18 +1,39 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { CreateSongDTO } from './dto/create-song-dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Song } from './song.entity';
+import { UpdateSongDto } from './dto/update-song-dto';
 
 @Injectable({
   scope: Scope.TRANSIENT
 })
 export class SongsService {
-  private readonly songs: CreateSongDTO[] = [];
-  create(song: CreateSongDTO): string {
-    this.songs.push(song);
-    console.log(this.songs, 'this.songs');
-    return 'Song created successfully';
+  constructor(
+    @InjectRepository(Song)
+    private songsRepository: Repository<Song>,
+  ) {}
+  async create(songDTO: CreateSongDTO): Promise<Song> {
+    const song = new Song();
+    song.title = songDTO.title;
+    song.artists = songDTO.artists;
+    song.duration = songDTO.duration;
+    song.lyrics = songDTO.lyrics;
+    song.releasedDate = songDTO.releasedDate;
+    return await this.songsRepository.save(song);
   }
-  findAll(): any[] {
-    //throw new Error('Error in findAll');
-    return this.songs;
+  async findAll(): Promise<Song[]> {
+    return await this.songsRepository.find();
   }
+
+  async findOne(id: number): Promise<Song | null> {
+    return await this.songsRepository.findOneBy({ id });
+  }
+  async update(id: number, recordToUpdate: UpdateSongDto): Promise<UpdateResult> {
+    return await this.songsRepository.update(id, recordToUpdate);
+  }
+  async remove(id: number): Promise<DeleteResult> {
+    return await this.songsRepository.delete(id);
+  }
+  
 }
