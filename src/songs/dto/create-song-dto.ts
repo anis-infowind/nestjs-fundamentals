@@ -5,6 +5,7 @@ import {
   IsDateString,
   IsMilitaryTime,
   IsOptional,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateSongDTO {
@@ -13,9 +14,10 @@ export class CreateSongDTO {
   readonly title: string;
 
   @IsArray()
-  @IsString({ each: true })
+  //@IsString({ each: true })
+  @IsNumber({}, { each: true }) // For relationship
   @IsNotEmpty()
-  readonly artists: string[];
+  readonly artists: number[];
 
   @IsDateString()
   @IsNotEmpty()
