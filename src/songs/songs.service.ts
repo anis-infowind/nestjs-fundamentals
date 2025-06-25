@@ -2,7 +2,7 @@ import { Injectable, Scope } from '@nestjs/common';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Song } from './song.entity';
+import { Song } from './entities/song.entity';
 import { UpdateSongDto } from './dto/update-song-dto';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 
