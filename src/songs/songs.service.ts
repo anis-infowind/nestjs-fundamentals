@@ -1,4 +1,4 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
@@ -45,18 +45,28 @@ export class SongsService {
   async findOne(id: number): Promise<Song | null> {
     return await this.songsRepository.findOneBy({ id });
   }
-  async update(id: number, recordToUpdate: UpdateSongDto): Promise<UpdateResult> {
-    //return await this.songsRepository.update(id, recordToUpdate);
-    let updateData: any = { ...recordToUpdate };
+  async update(id: number, recordToUpdate: UpdateSongDto): Promise<Song> {
+    const song = await this.songsRepository.findOne({
+      where: { id },
+      relations: ['artists'], // ensure artists relation is loaded
+    });
+  
+    if (!song) {
+      throw new NotFoundException(`Song with ID ${id} not found`);
+    }
+  
+    // Update direct fields (e.g., title, duration, etc.)
+    Object.assign(song, recordToUpdate);
+  
+    // If artists are being updated
     if (recordToUpdate.artists) {
       const artists = await this.artistsRepository.find({
-        where: { id: In(recordToUpdate.artists) }
+        where: { id: In(recordToUpdate.artists) },
       });
-      
-      updateData.artists = artists;
-      console.log(updateData, 'updateData')
+      song.artists = artists;
     }
-    return await this.songsRepository.update(id, updateData);
+  
+    return await this.songsRepository.save(song); // ✅ updates join table too
   }
   async remove(id: number): Promise<DeleteResult> {
     return await this.songsRepository.delete(id);

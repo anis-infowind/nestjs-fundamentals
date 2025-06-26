@@ -94,7 +94,7 @@ export class SongsController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateSongDTO: UpdateSongDto,
-  ): Promise<UpdateResult> {
+  ): Promise<Song> {
     return await this.songsService.update(id, updateSongDTO);
   }
   @Delete(':id')
