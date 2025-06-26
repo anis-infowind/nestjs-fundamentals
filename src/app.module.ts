@@ -22,27 +22,27 @@ const proConfig = { port: 4000 };
   imports: [
     SongsModule,
     // Postgres Connection
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      database: 'spotify-clone',
+      host: 'localhost',
+      port: 5432,
+      username: 'root',
+      password: 'Iamlama/6/',
+      entities: [Song, User, Artist, Playlist],
+      synchronize: true,
+    }),
+    // Mysql Connection
     // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   database: 'spotify-clone',
+    //   type: 'mysql',
     //   host: 'localhost',
     //   port: 3306,
     //   username: 'root',
-    //   password: 'root',
-    //   entities: [],
-    //   synchronize: true,
+    //   password: 'Iamlama/6/',
+    //   database: 'spotify-clone',
+    //   entities: [Song, User, Artist, Playlist],
+    //   synchronize: true, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
     // }),
-    // Mysql Connection
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'Iamlama/6/',
-      database: 'spotify-clone',
-      entities: [Song, User, Artist, Playlist],
-      synchronize: true, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
-    }),
     PlayListsModule,
   ],
   controllers: [AppController],
