@@ -9,7 +9,11 @@ import { SongsController } from './songs/songs.controller';
 import { DevConfigService } from './common/providers/dev-config-service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Song } from './songs/song.entity';
+import { Song } from './songs/entities/song.entity';
+import { User } from './users/entities/user.entity';
+import { Artist } from './artists/entities/artist.entity';
+import { PlayListsModule } from './playlists/playlists.module';
+import { Playlist } from './playlists/entities/playlist.entity';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -36,9 +40,10 @@ const proConfig = { port: 4000 };
       username: 'root',
       password: 'Iamlama/6/',
       database: 'spotify-clone',
-      entities: [Song],
+      entities: [Song, User, Artist, Playlist],
       synchronize: true, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
     }),
+    PlayListsModule,
   ],
   controllers: [AppController],
   providers: [
