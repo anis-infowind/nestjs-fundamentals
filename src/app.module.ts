@@ -14,6 +14,8 @@ import { User } from './users/entities/user.entity';
 import { Artist } from './artists/entities/artist.entity';
 import { PlayListsModule } from './playlists/playlists.module';
 import { Playlist } from './playlists/entities/playlist.entity';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -44,6 +46,8 @@ const proConfig = { port: 4000 };
     //   synchronize: true, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
     // }),
     PlayListsModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
