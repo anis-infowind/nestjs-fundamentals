@@ -30,11 +30,14 @@ export class UsersService {
     // Now, the password property is completely removed from the user object before it is returned, so it will not be sent in the response. This approach is type-safe and avoids TypeScript errors. Let me know if you need this applied elsewhere or want to handle it differently!
   }
 
-  async findOne(data: LoginDTO): Promise<User> {
+  async findOne(data: LoginDTO): Promise<any> {
     const user = await this.userRepository.findOneBy({ email: data.email });
-    if (!user) {
-      throw new UnauthorizedException('Could not find user');
-    }
+    
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<any> {
+    const user = await this.userRepository.findOneBy({ email });
     return user;
   }
 }

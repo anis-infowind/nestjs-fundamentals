@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { CreateUserDTO } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -19,11 +20,19 @@ export class AuthController {
     return this.userService.create(userDTO);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(
+  async login(
+  @Request() req: any
+  ) {
+    return this.authService.login(req.user);
+  }
+
+  @Post('login2')
+  login2(
     @Body()
     loginDTO: LoginDTO,
   ) {
-    return this.authService.login(loginDTO);
+    return this.authService.login2(loginDTO);
   }
 }
