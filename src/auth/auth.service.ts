@@ -4,12 +4,15 @@ import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ArtistsService } from 'src/artists/artists.service';
+import { PayloadType } from 'src/types/payload.type';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
+    private artistService: ArtistsService
   ) {}
   async login2(loginDTO: LoginDTO): Promise<{ accessToken: string }> {
     const user = await this.userService.findOne(loginDTO); // 1.
@@ -27,7 +30,11 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const payload: PayloadType = { email: user.email, sub: user.id };
+    const artist = await this.artistService.findArtist(user.id);
+    if (artist) {
+      payload.artistId = artist.id;
+    }
     return {
       access_token: this.jwtService.sign(payload),
     };
