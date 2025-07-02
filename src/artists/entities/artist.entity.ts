@@ -9,11 +9,11 @@ export class Artist {
 
   // A user can register as an artist​
   // Each artist will have only a user profile​
-  @OneToOne(() => User)
+  @OneToOne(() => User, { cascade: true, onDelete: 'CASCADE' } )
   @JoinColumn()
   user: User;
 
   //Add Many to Many Relation in Artist
-  @ManyToMany(() => Song, (song) => song.artists)
+  @ManyToMany(() => Song, (song) => song.artists, { onDelete: 'CASCADE' })
   songs: Song[];
 }
