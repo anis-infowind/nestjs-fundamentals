@@ -32,12 +32,25 @@ export class AuthService {
     }
   }
 
-  async login(user: any) {
+  async login(user: any): Promise<{ access_token: string } | { validate2FA: string; message: string }> {
     const payload: PayloadType = { email: user.email, sub: user.id };
     const artist = await this.artistService.findArtist(user.id);
     if (artist) {
       payload.artistId = artist.id;
     }
+
+    if (user.enable2FA && user.twoFASecret) {
+      //1.
+      // sends the validateToken request link
+      // else otherwise sends the json web token in the response
+      return {
+        //2.
+        validate2FA: 'http://localhost:3000/auth/validate-2fa',
+        message:
+          'Please sends the one time password/token from your Google Authenticator App',
+      };
+    }
+    
     return {
       access_token: this.jwtService.sign(payload),
     };
