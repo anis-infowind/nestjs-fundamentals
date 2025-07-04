@@ -32,7 +32,7 @@ export class AuthService {
     }
   }
 
-  async login(user: any): Promise<{ access_token: string } | { validate2FA: string; message: string }> {
+  async login(user: any): Promise<{ access_token: string } | { userId: number, message: string }> {
     const payload: PayloadType = { email: user.email, sub: user.id };
     const artist = await this.artistService.findArtist(user.id);
     if (artist) {
@@ -45,12 +45,21 @@ export class AuthService {
       // else otherwise sends the json web token in the response
       return {
         //2.
-        validate2FA: 'http://localhost:3000/auth/validate-2fa',
-        message:
-          'Please sends the one time password/token from your Google Authenticator App',
+        userId: user.id,
+        message: 'Please sends the one time password/token from your Google Authenticator App',
       };
     }
-    
+
+    return await this.generateAccessToken(user);
+  }
+
+  async generateAccessToken(user: any): Promise<{ access_token: string }> {
+    const payload: PayloadType = { email: user.email, sub: user.id };
+    const artist = await this.artistService.findArtist(user.id);
+    if (artist) {
+      payload.artistId = artist.id;
+    }
+
     return {
       access_token: this.jwtService.sign(payload),
     };
@@ -82,10 +91,16 @@ export class AuthService {
   async validate2FAToken(
     userId: number,
     token: string,
-  ): Promise<{ verified: boolean }> {
+  ): Promise<{ verified: boolean; access_token?: string; message?: string; }> {
     try {
       // find the user on the based on id
       const user = await this.userService.findById(userId);
+
+      if (!user) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+
+      const { password: password, ...result } = user;
 
       // extract his 2FA secret
 
@@ -98,9 +113,16 @@ export class AuthService {
 
       // if validated then sends the json web token in the response
       if (verified) {
-        return { verified: true };
+        const accessToken = await this.generateAccessToken(result);
+        return {
+          verified: true,
+          access_token: accessToken.access_token
+        };
       } else {
-        return { verified: false };
+        return {
+          verified: false,
+          message: 'Code is expired',
+        };
       }
     } catch (err) {
       throw new UnauthorizedException('Error verifying token');
