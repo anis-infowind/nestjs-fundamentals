@@ -54,14 +54,12 @@ export class AuthController {
   }
 
   @Post('validate-2fa')
-  @UseGuards(JwtAuthGuard)
   validate2FA(
-    @Req() req: ExpressRequest,
     @Body()
     ValidateTokenDTO: ValidateTokenDTO,
-  ): Promise<{ verified: boolean }> {
+  ) {
     return this.authService.validate2FAToken(
-      (req.user as any).userId,
+      ValidateTokenDTO.userId,
       ValidateTokenDTO.token,
     );
   }
