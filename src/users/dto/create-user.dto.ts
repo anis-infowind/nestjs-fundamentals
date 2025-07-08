@@ -16,4 +16,6 @@ export class CreateUserDTO {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  apiKey: string | null;
 }
