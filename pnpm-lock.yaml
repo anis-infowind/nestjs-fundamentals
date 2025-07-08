@@ -53,6 +53,9 @@ importers:
       passport:
         specifier: ^0.7.0
         version: 0.7.0
+      passport-http-bearer:
+        specifier: ^1.0.1
+        version: 1.0.1
       passport-jwt:
         specifier: ^4.0.1
         version: 4.0.1
@@ -74,6 +77,9 @@ importers:
       typeorm:
         specifier: ^0.3.25
         version: 0.3.25(mysql2@3.14.1)(pg@8.16.2)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.12.4)(@types/node@22.15.32)(typescript@5.8.3))
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -2975,6 +2981,10 @@ packages:
   parseurl@1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
+
+  passport-http-bearer@1.0.1:
+    resolution: {integrity: sha512-SELQM+dOTuMigr9yu8Wo4Fm3ciFfkMq5h/ZQ8ffi4ELgZrX1xh9PlglqZdcUZ1upzJD/whVyt+YWF62s3U6Ipw==}
+    engines: {node: '>= 0.4.0'}
 
   passport-jwt@4.0.1:
     resolution: {integrity: sha512-UCKMDYhNuGOBE9/9Ycuoyh7vP6jpeTp/+sfMJl7nLff/t6dps+iaeE0hhNkKN8/HZHcJ7lCdOyDxHdDoxoSvdQ==}
@@ -7112,6 +7122,10 @@ snapshots:
       lines-and-columns: 1.2.4
 
   parseurl@1.3.3: {}
+
+  passport-http-bearer@1.0.1:
+    dependencies:
+      passport-strategy: 1.0.0
 
   passport-jwt@4.0.1:
     dependencies:

@@ -8,6 +8,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { authConstants } from './auth.constants';
 import { ArtistsModule } from 'src/artists/artists.module';
+import { ApiKeyStrategy } from './strategies/api-key.strategy';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ArtistsModule } from 'src/artists/artists.module';
     }),
     ArtistsModule
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, ApiKeyStrategy],
   controllers: [AuthController],
   exports: [AuthService]
 })

@@ -6,6 +6,7 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { LoginDTO } from 'src/auth/dto/login.dto';
 import { ArtistsService } from 'src/artists/artists.service';
+import { v4 as uuid4 } from "uuid";
 
 @Injectable()
 export class UsersService {
@@ -24,6 +25,8 @@ export class UsersService {
         error: 'User with this email already exists',
       }, HttpStatus.CONFLICT);
     }
+
+    userDTO.apiKey = uuid4(); // generate unique API key for each user
     const salt = await bcrypt.genSalt(); // 2.
     userDTO.password = await bcrypt.hash(userDTO.password, salt); // 3.
     const user = await this.userRepository.save(userDTO); // 4.
@@ -68,5 +71,9 @@ export class UsersService {
         enable2FA: false
       },
     );
+  }
+
+  async findByApiKey(apiKey: string): Promise<any> {
+    return this.userRepository.findOneBy({ apiKey });
   }
 }
