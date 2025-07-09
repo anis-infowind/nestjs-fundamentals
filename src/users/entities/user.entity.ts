@@ -29,6 +29,9 @@ export class User {
   @Column({ nullable: true, type: 'text' })
   apiKey: string | null;
 
+  @Column({ nullable: true })
+  phone: string
+
   /**
    * A user can create many playLists
    */

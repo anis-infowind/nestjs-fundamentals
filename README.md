@@ -70,6 +70,25 @@ $ mau deploy
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
+## Databse Migration
+In package.json add the following scripts for database migration
+
+```bash
+"typeorm": "npm run build && npx typeorm -d dist/db/data-source.js",
+"migration:generate": "npm run typeorm migration:generate",
+"migration:run": "npm run typeorm migration:run",
+"migration:revert": "npm run typeorm migration:revert"
+```
+Command to generate migration file and migrate database table
+```bash
+# generate new migration
+$ pnpm migration:generate db/migrations/add-user-phone
+# applies your new changes
+$ pnpm migration:run
+# revert your last migration changes
+$ pnpm migration:revert
+```
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:
