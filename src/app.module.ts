@@ -17,6 +17,7 @@ import { Playlist } from './playlists/entities/playlist.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
+import { dataSourceOptions } from 'db/data-source';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -25,16 +26,17 @@ const proConfig = { port: 4000 };
   imports: [
     SongsModule,
     // Postgres Connection
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      database: 'spotify-clone',
-      host: 'localhost',
-      port: 5432,
-      username: 'root',
-      password: 'Iamlama/6/',
-      entities: [Song, User, Artist, Playlist],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions), // Database Migration
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   database: 'spotify-clone',
+    //   host: 'localhost',
+    //   port: 5432,
+    //   username: 'root',
+    //   password: 'Iamlama/6/',
+    //   entities: [Song, User, Artist, Playlist],
+    //   synchronize: true,
+    // }),
     // Mysql Connection
     // TypeOrmModule.forRoot({
     //   type: 'mysql',
