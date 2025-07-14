@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 // Force TypeORM to use mysql2 instead of broken mysql fallback
 import { PlatformTools } from 'typeorm/platform/PlatformTools';
 import { SeedService } from './seed/seed.service';
+import { ConfigService } from '@nestjs/config';
 
 PlatformTools.load = (name: string) => {
   if (name === 'mysql') {
@@ -20,6 +21,7 @@ async function bootstrap() {
    */
   // const seedService = app.get(SeedService);
   // await seedService.seed();
-  await app.listen(process.env.PORT ?? 3000);
+  const configService = app.get(ConfigService);
+  await app.listen(configService.get<number>('port') ?? 3000);
 }
 void bootstrap();

@@ -19,13 +19,19 @@ import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
 import { dataSourceOptions } from 'db/data-source';
 import { SeedModule } from './seed/seed.module';
+import { ConfigModule } from '@nestjs/config';
+import { configuration } from './config/configuration';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
 
 @Module({
   imports: [
-    SongsModule,
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development', '.env.production'],
+      isGlobal: true,
+      load: [configuration],
+    }),
     // Postgres Connection
     TypeOrmModule.forRoot(dataSourceOptions), // Database Migration
     // TypeOrmModule.forRoot({
@@ -49,6 +55,7 @@ const proConfig = { port: 4000 };
     //   entities: [Song, User, Artist, Playlist],
     //   synchronize: true, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
     // }),
+    SongsModule,
     PlayListsModule,
     AuthModule,
     UsersModule,
