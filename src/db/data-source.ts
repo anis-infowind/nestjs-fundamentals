@@ -1,3 +1,12 @@
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+dotenv.config({
+  path: path.resolve(
+    process.cwd(),
+    `.env.${process.env.NODE_ENV || 'development'}`,
+  ),
+});
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import {
@@ -30,6 +39,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       database: configService.get<string>("database.dbName"),
       entities: ["dist/**/*.entity.js"],
       synchronize: false,
+      autoLoadEntities: true,
       migrations: ["dist/db/migrations/*.js"],
     };
   },
@@ -42,9 +52,10 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ['dist/**/*.entity.js'], //1
+  entities: ['src/**/*.entity.ts'], //1
   synchronize: false, // 2
-  migrations: ['dist/db/migrations/*.js'], // 3
+  autoLoadEntities: true,
+  migrations: ['db/migrations/*.ts'], // 3
 } as DataSourceOptions;
 
 const dataSource = new DataSource(dataSourceOptions); //4

@@ -11,6 +11,9 @@ PlatformTools.load = (name: string) => {
   if (name === 'mysql') {
     return require('mysql2'); // 🔥 force correct driver
   }
+  if (name === 'pg') {
+    return require('pg'); // 🔥 force correct driver
+  }
   return require(name);
 };
 
