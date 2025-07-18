@@ -40,6 +40,9 @@ $ pnpm run start
 # watch mode
 $ pnpm run start:dev
 
+# webpack HMR (Hot-Module Replacement)
+$ pnpm run start:hmr
+
 # production mode
 $ pnpm run start:prod
 ```

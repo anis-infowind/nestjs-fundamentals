@@ -7,6 +7,8 @@ import { PlatformTools } from 'typeorm/platform/PlatformTools';
 import { SeedService } from './seed/seed.service';
 import { ConfigService } from '@nestjs/config';
 
+declare const module: any;
+
 PlatformTools.load = (name: string) => {
   if (name === 'mysql') {
     return require('mysql2'); // 🔥 force correct driver
@@ -26,5 +28,10 @@ async function bootstrap() {
   // await seedService.seed();
   const configService = app.get(ConfigService);
   await app.listen(configService.get<number>('port') ?? 3000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 void bootstrap();
