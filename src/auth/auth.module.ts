@@ -9,14 +9,21 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { authConstants } from './auth.constants';
 import { ArtistsModule } from 'src/artists/artists.module';
 import { ApiKeyStrategy } from './strategies/api-key.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
-    JwtModule.register({
-      secret: authConstants.secret,
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('jwt.secret'),
+        signOptions: {
+          expiresIn: configService.get<string>('jwt.expiresIn'),
+        },
+      }),
+      inject: [ConfigService],
     }),
     ArtistsModule
   ],

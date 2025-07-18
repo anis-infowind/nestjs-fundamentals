@@ -19,4 +19,9 @@ export class AppController {
   ) {
     return req.user;
   }
+
+  @Get('test')
+  testEnv() {
+    return this.appService.getEnvVariables();
+  }
 }

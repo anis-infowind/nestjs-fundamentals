@@ -40,6 +40,9 @@ $ pnpm run start
 # watch mode
 $ pnpm run start:dev
 
+# webpack HMR (Hot-Module Replacement)
+$ pnpm run start:hmr
+
 # production mode
 $ pnpm run start:prod
 ```
@@ -74,10 +77,10 @@ With Mau, you can deploy your application in just a few clicks, allowing you to 
 In package.json add the following scripts for database migration
 
 ```bash
-"typeorm": "npm run build && npx typeorm -d dist/db/data-source.js",
-"migration:generate": "npm run typeorm migration:generate",
-"migration:run": "npm run typeorm migration:run",
-"migration:revert": "npm run typeorm migration:revert"
+"typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
+"migration:generate": "npm run typeorm -- -d ./src/db/data-source.ts migration:generate ./src/db/migrations/$npm_config_name",
+"migration:run": "npm run typeorm -- -d ./src/db/data-source.ts migration:run",
+"migration:revert": "npm run typeorm -- -d ./src/db/data-source.ts migration:revert"
 ```
 Command to generate migration file and migrate database table
 ```bash
