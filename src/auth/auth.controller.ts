@@ -11,14 +11,21 @@ import { Enable2FAType } from 'src/types/auth-types';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { UpdateResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags("auth")
 export class AuthController {
   constructor(
     private userService: UsersService,
     private authService: AuthService
   ) {}
   @Post('signup')
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'It will return the user in the response',
+  })
   signup(
     @Body()
     userDTO: CreateUserDTO,
@@ -28,6 +35,12 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @ApiBody({ type: LoginDTO })
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({
+    status: 201,
+    description: 'It will give you the access_token in the response or if 2FA is enabled then use /auth/validate-2fa api and provide userId and 6 digits 2FA code, if success you will get access_token in the response',
+  })
   async login(
   @Req() req: ExpressRequest
   ) {
