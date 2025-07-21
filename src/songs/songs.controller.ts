@@ -26,11 +26,13 @@ import { DeleteResult, UpdateResult } from 'typeorm';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { JwtArtistGuard } from '../auth/guards/jwt-artist.guard';
 import { Request as ExpressRequest } from 'express';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'songs',
   scope: Scope.REQUEST
 })
+@ApiTags('songs')
 export class SongsController {
   constructor(
     private readonly songsService: SongsService,
@@ -43,6 +45,12 @@ export class SongsController {
   }
   @Post()
   @UseGuards(JwtArtistGuard)
+  @ApiBody({ type: CreateSongDTO })
+  @ApiOperation({ summary: 'Create new song' })
+  @ApiResponse({
+    status: 201,
+    description: 'It will return the song in the response',
+  })
   async create(
     @Body() createSongDTO: CreateSongDTO,
     @Req() req: ExpressRequest
