@@ -31,6 +31,22 @@
 $ pnpm install
 ```
 
+## Mongoose ( MongoDB ) Connection
+
+### Running
+
+This example requires docker or a local mongodb installation.
+
+#### Docker
+
+There is a `docker-compose.yml` file for starting Docker.
+
+`docker-compose up`
+
+After running the sample, you can stop the Docker container with
+
+`docker-compose down`
+
 ## Compile and run the project
 
 ```bash
