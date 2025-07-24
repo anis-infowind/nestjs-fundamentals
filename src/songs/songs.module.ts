@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { SongsController } from './songs.controller';
 import { SongsService } from './songs.service';
 import { connection } from 'src/common/constants/connection';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Song } from './entities/song.entity';
-import { Artist } from 'src/artists/entities/artist.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Song, SongSchema } from './schemas/song.schema';
+import { Artist, ArtistSchema } from 'src/artists/schemas/artist.schema';
 
 const mockSongsService = {
   findAll() {
@@ -12,7 +12,13 @@ const mockSongsService = {
   },
 };
 @Module({
-  imports: [TypeOrmModule.forFeature([Song, Artist])],
+  imports: [
+    //TypeOrmModule.forFeature([Song, Artist]),
+    MongooseModule.forFeature([
+      { name: Song.name, schema: SongSchema },
+      { name: Artist.name, schema: ArtistSchema },
+    ]),
+  ],
   controllers: [SongsController],
   providers: [
     SongsService, // option 1

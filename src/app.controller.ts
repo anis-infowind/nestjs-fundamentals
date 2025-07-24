@@ -20,6 +20,7 @@ export class AppController {
   getProfile(
     @Req() req: ExpressRequest,
   ) {
+    console.log(req)
     return req.user;
   }
 

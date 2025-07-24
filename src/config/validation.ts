@@ -15,28 +15,13 @@ class EnvironmentVariables {
   PORT: number;
 
   @IsString()
-  DB_CONNECTION: string;
-
-  @IsString()
-  DB_HOST: string;
-
-  @IsNumber()
-  DB_PORT: number;
-
-  @IsString()
-  DB_USERNAME: string;
-
-  @IsString()
-  DB_PASSWORD: string;
-
-  @IsString()
-  DB_NAME: string;
-
-  @IsString()
   JWT_SECRET: string;
 
   @IsString()
   JWT_EXPIRES_IN: string;
+
+  @IsString()
+  MONGO_URI: string;
 }
 export function validate(config: Record<string, unknown>) {
   //plainInstance converts plain (literal) object to class (constructor) object.

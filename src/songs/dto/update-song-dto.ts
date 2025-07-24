@@ -14,19 +14,19 @@ export class UpdateSongDto {
   @IsOptional()
   readonly title: string;
 
-  @ApiProperty({ required: false, type: [Number] })
+  @ApiProperty({ required: false, type: [String] })
   @IsOptional()
   @IsArray()
-  //@IsString({ each: true })
-  @IsNumber({}, { each: true }) // For relationship
-  readonly artists: number[];
+  @IsString({ each: true })
+  //@IsNumber({}, { each: true }) // For relationship
+  readonly artists: string[];
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, example: '2022-08-29' })
   @IsDateString()
   @IsOptional()
   readonly releasedDate: Date;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, example: '03:45' })
   @IsMilitaryTime()
   @IsOptional()
   readonly duration: Date;

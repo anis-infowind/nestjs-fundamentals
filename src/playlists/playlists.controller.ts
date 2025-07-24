@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CreatePlayListDto } from './dto/create-playlist.dto';
 import { PlayListsService } from './playlists.service';
-import { Playlist } from './entities/playlist.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { Playlist, PlaylistDocument } from './schemas/playlist.schema';
 
 @Controller('playlists')
 @ApiTags('playlists')
@@ -12,7 +12,7 @@ export class PlayListsController {
   create(
     @Body()
     playlistDTO: CreatePlayListDto,
-  ): Promise<Playlist> {
+  ): Promise<PlaylistDocument> {
     return this.playListService.create(playlistDTO);
   }
 }

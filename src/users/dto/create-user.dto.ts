@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDTO {
@@ -34,6 +34,7 @@ export class CreateUserDTO {
   @IsNotEmpty()
   password: string;
 
-  @ApiProperty({ required: false })
+  //@ApiProperty({ required: false })
+  @ApiHideProperty() // ✅ hides this field in Swagger UI
   apiKey: string | null;
 }

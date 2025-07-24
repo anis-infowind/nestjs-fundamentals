@@ -5,12 +5,15 @@ export const configuration = () => ({
     secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN,
   },
-  database: {
-    connection: process.env.DB_CONNECTION,
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || '5432', 10),
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    dbName: process.env.DB_NAME,
+  // database: {
+  //   connection: process.env.DB_CONNECTION,
+  //   host: process.env.DB_HOST,
+  //   port: parseInt(process.env.DB_PORT || '5432', 10),
+  //   username: process.env.DB_USERNAME,
+  //   password: process.env.DB_PASSWORD,
+  //   dbName: process.env.DB_NAME,
+  // },
+  mongodb: {
+    connetion: process.env.MONGO_URI
   }
 });

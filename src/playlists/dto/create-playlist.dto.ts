@@ -1,16 +1,21 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePlayListDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   readonly name: string;
 
+  @ApiProperty({ type: [String] })
   @IsNotEmpty()
   @IsArray()
-  @IsNumber({}, { each: true })
-  readonly songs: number[];
+  @IsString({ each: true })
+  //@IsNumber({}, { each: true })
+  readonly songs: string[];
 
-  @IsNumber()
+  @ApiProperty()
+  @IsString()
   @IsNotEmpty()
-  readonly user: number;
+  readonly user: string;
 }
