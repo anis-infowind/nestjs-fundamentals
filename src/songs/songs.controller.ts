@@ -20,13 +20,12 @@ import {
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { Connection } from 'src/common/constants/connection';
-import { Song } from './entities/song.entity';
+import { Song, SongDocument } from './schemas/song.schema';
 import { UpdateSongDto } from './dto/update-song-dto';
-import { DeleteResult, UpdateResult } from 'typeorm';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { JwtArtistGuard } from '../auth/guards/jwt-artist.guard';
 import { Request as ExpressRequest } from 'express';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PaginatedResult } from 'src/common/interface/paginated-result/paginated-result.interface';
 
 @Controller({
   path: 'songs',
@@ -44,6 +43,7 @@ export class SongsController {
     );
   }
   @Post()
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtArtistGuard)
   @ApiBody({ type: CreateSongDTO })
   @ApiOperation({ summary: 'Create new song' })
@@ -54,11 +54,15 @@ export class SongsController {
   async create(
     @Body() createSongDTO: CreateSongDTO,
     @Req() req: ExpressRequest
-  ): Promise<Song> {
+  ): Promise<SongDocument> {
     console.log(req.user, "req.user => SongsController");
     return this.songsService.create(createSongDTO);
   }
   @Get()
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiQuery({ name: 'orderBy', required: false, type: String })
+  @ApiQuery({ name: 'order', required: false, enum: ['ASC', 'DESC'], example: 'DESC' })
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe)
     page = 1,
@@ -66,7 +70,7 @@ export class SongsController {
     limit = 10,
     @Query('orderBy') orderBy?: string,
     @Query('order', new DefaultValuePipe('DESC')) order: 'ASC' | 'DESC' = 'DESC',
-  ): Promise<Pagination<Song>> {
+  ): Promise<PaginatedResult<SongDocument>> {
     try {
       limit = limit > 100 ? 100 : limit;
       //return this.songsService.findAll();
@@ -86,36 +90,27 @@ export class SongsController {
     }
   }
   @Get(':id')
-  async findOne(
-    // option 1
-    // @Param('id', ParseIntPipe) id: number) {
-    //   return `Song details by ID: ${id} ${typeof id}`;
-    // }
-    @Param(
-      'id',
-       //ParseIntPipe,
-      new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE}),
-    ) id: number): Promise<Song | null> {
-      const song = await this.songsService.findOne(id);
-      if (!song) {
-        throw new HttpException({
-          status: HttpStatus.NOT_FOUND,
-          error: 'Song not found',
-        }, HttpStatus.NOT_FOUND);
-      }
-      return song;
+  async findOne(@Param('id') id: string): Promise<SongDocument> {
+    const song = await this.songsService.findOne(id);
+    if (!song) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Song not found',
+      }, HttpStatus.NOT_FOUND);
+    }
+    return song as SongDocument;
   }
   @Put(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateSongDTO: UpdateSongDto,
-  ): Promise<Song> {
+  ): Promise<SongDocument> {
     return await this.songsService.update(id, updateSongDTO);
   }
   @Delete(':id')
   async remove(
-    @Param('id', ParseIntPipe) id:number
-  ): Promise<DeleteResult> {
+    @Param('id') id:string
+  ): Promise<{ deleted: boolean }> {
     return await this.songsService.remove(id);
   }
 }

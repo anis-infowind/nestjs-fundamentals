@@ -22,6 +22,8 @@ import { SeedModule } from './seed/seed.module';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config/configuration';
 import { validate } from './config/validation';
+import { MongooseModule } from '@nestjs/mongoose';
+import { mongoDBConfig } from './db/mongodb-config';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -34,8 +36,10 @@ const proConfig = { port: 4000 };
       load: [configuration],
       validate: validate,
     }),
+    // Mongodb Connection
+    MongooseModule.forRootAsync(mongoDBConfig),
     // Postgres Connection
-    TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
+    //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
     //   type: 'postgres',
     //   database: 'spotify-clone',
@@ -84,9 +88,7 @@ const proConfig = { port: 4000 };
   ],
 })
 export class AppModule implements NestModule {
-  constructor(private dataSource: DataSource) {
-    console.log('dbName ', dataSource.driver.database);
-  }
+  
   configure(consumer: MiddlewareConsumer) {
     //consumer.apply(LoggerMiddleware).forRoutes('songs'); // option no 1
     // consumer

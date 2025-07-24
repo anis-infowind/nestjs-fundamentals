@@ -1,27 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { seedData } from '../db/seeds/seed-data';
+import { seedMongoData } from '../db/seeds/seed-mongo';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
+import { Artist, ArtistDocument } from 'src/artists/schemas/artist.schema';
+import { Model } from 'mongoose';
+import { Playlist, PlaylistDocument } from 'src/playlists/schemas/playlist.schema';
+import { Song, SongDocument } from 'src/songs/schemas/song.schema';
 
 @Injectable()
 export class SeedService {
-  constructor(private readonly connection: DataSource) {}
+  constructor(
+    @InjectModel(User.name)
+    private readonly userModel: Model<UserDocument>,
 
-  async seed(): Promise<void> {
-    const queryRunner = this.connection.createQueryRunner(); //1
+    @InjectModel(Artist.name)
+    private readonly artistModel: Model<ArtistDocument>,
 
-    await queryRunner.connect(); //2
-    await queryRunner.startTransaction(); //3
+    @InjectModel(Playlist.name)
+    private readonly playlistModel: Model<PlaylistDocument>,
 
+    @InjectModel(Song.name)
+    private readonly songModel: Model<SongDocument>
+  ) {}
+
+  async seedMongoDB(): Promise<void> {
     try {
-      const manager = queryRunner.manager;
-      await seedData(manager);
-
-      await queryRunner.commitTransaction(); //4
+      await seedMongoData(this.userModel, this.artistModel, this.playlistModel, this.songModel);
+      console.log('🌱 Seeding completed.');
     } catch (err) {
-      console.log('Error during database seeding:', err);
-      await queryRunner.rollbackTransaction(); // 5
-    } finally {
-      await queryRunner.release(); //6
+      console.error('❌ Error during database seeding:', err);
     }
   }
 }

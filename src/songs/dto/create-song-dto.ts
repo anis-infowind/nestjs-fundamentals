@@ -15,22 +15,22 @@ export class CreateSongDTO {
   @IsNotEmpty()
   readonly title: string;
 
-  @ApiProperty({ type: [Number] })
+  @ApiProperty({ type: [String] })
   @IsArray()
-  //@IsString({ each: true })
-  @IsNumber({}, { each: true }) // For relationship
+  @IsString({ each: true })
+  //@IsNumber({}, { each: true }) // For relationship
   @IsNotEmpty()
-  readonly artists: number[];
+  readonly artists: string[];
 
-  @ApiProperty()
+  @ApiProperty({ example: '2022-08-29' })
   @IsDateString()
   @IsNotEmpty()
   readonly releasedDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({ example: '03:45' }) // HH:mm format
   @IsMilitaryTime()
   @IsNotEmpty()
-  readonly duration: Date;
+  readonly duration: string;
 
   @ApiProperty({ required: false })
   @IsString()

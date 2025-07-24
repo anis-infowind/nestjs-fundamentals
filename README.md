@@ -31,6 +31,22 @@
 $ pnpm install
 ```
 
+## Mongoose ( MongoDB ) Connection
+
+### Running
+
+This example requires docker or a local mongodb installation.
+
+#### Docker
+
+There is a `docker-compose.yml` file for starting Docker.
+
+`docker-compose up`
+
+After running the sample, you can stop the Docker container with
+
+`docker-compose down`
+
 ## Compile and run the project
 
 ```bash
@@ -73,7 +89,7 @@ $ mau deploy
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Databse Migration
+## Databse Migration ( Only for TypeORM like postgres and mysql )
 In package.json add the following scripts for database migration
 
 ```bash

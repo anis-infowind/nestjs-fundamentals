@@ -1,21 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Artist } from './entities/artist.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/schemas/user.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Artist, ArtistDocument } from './schemas/artist.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class ArtistsService {
   constructor(
-  @InjectRepository(Artist)
-  private artistRepository: Repository<Artist>
+    @InjectModel(Artist.name)
+    private readonly artistModel:Model<ArtistDocument>
   ) {}
-  findArtist(userId: number): Promise<Artist | null> {
-    return this.artistRepository.findOneBy({ user: { id: userId } });
+
+  async findArtist(userId: string): Promise<ArtistDocument | null> {
+    return this.artistModel.findOne({ 'user': userId }).populate('user').exec();
   }
 
-  async createArtistForUser(user: User): Promise<Artist> {
-    const artist = this.artistRepository.create({ user });
-    return this.artistRepository.save(artist);
+  async createArtistForUser(user: User): Promise<ArtistDocument> {
+    const createdArtist = new this.artistModel({ user });
+    return createdArtist.save();
   }
 }

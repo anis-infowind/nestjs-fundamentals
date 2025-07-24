@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { CreateUserDTO } from 'src/users/dto/create-user.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User, UserDocument } from '../users/schemas/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
@@ -11,7 +11,7 @@ import { Enable2FAType } from 'src/types/auth-types';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { UpdateResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags("auth")
@@ -56,13 +56,14 @@ export class AuthController {
   }
 
   @Post('enable-2fa')
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
   enable2FA(
     @Req() req: ExpressRequest,
   ): Promise<Enable2FAType> {
     console.log(req.user, 'User Data 2FA');
     if (!req.user) {
-      throw new UnauthorizedException('User not authenticated');
+     // throw new UnauthorizedException('User not authenticated');
     }
     return this.authService.enable2FA((req.user as any).userId);
   }
@@ -79,11 +80,21 @@ export class AuthController {
   }
 
   @Post('disable-2fa')
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
   disable2FA(
     @Req() req: ExpressRequest,
-  ): Promise<UpdateResult> {
-  return this.authService.disable2FA((req.user as any).userId);
+  ): Promise<UserDocument | null> {
+    return this.authService.disable2FA((req.user as any).userId);
+  }
+
+  @Post('my-details')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  myDetails(
+    @Req() req: ExpressRequest,
+  ): Promise<UserDocument | null> {
+    return this.authService.myDetails((req.user as any).userId);
   }
 
   @Get('profile')
