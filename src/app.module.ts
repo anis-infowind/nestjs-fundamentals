@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +24,10 @@ import { configuration } from './config/configuration';
 import { validate } from './config/validation';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongoDBConfig } from './db/mongodb-config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { MyLoggerModule } from './my-logger/my-logger.module';
+import { AllExceptionsFilter } from 'all-exceptions.filter';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -38,6 +42,23 @@ const proConfig = { port: 4000 };
     }),
     // Mongodb Connection
     MongooseModule.forRootAsync(mongoDBConfig),
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 1000,
+        limit: 3,
+      },
+      {
+        name: 'medium',
+        ttl: 10000,
+        limit: 20
+      },
+      {
+        name: 'long',
+        ttl: 60000,
+        limit: 100
+      }
+    ]),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
@@ -67,6 +88,7 @@ const proConfig = { port: 4000 };
     UsersModule,
     ArtistsModule,
     SeedModule,
+    MyLoggerModule,
   ],
   controllers: [AppController],
   providers: [
@@ -85,6 +107,14 @@ const proConfig = { port: 4000 };
         return process.env.NODE_ENV === 'development' ? devConfig : proConfig;
       },
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    }
   ],
 })
 export class AppModule implements NestModule {

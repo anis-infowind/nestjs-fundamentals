@@ -16,6 +16,7 @@ import {
   Query,
   UseGuards,
   Req,
+  Ip,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
@@ -26,7 +27,10 @@ import { JwtArtistGuard } from '../auth/guards/jwt-artist.guard';
 import { Request as ExpressRequest } from 'express';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaginatedResult } from 'src/common/interface/paginated-result/paginated-result.interface';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import { MyLoggerService } from 'src/my-logger/my-logger.service';
 
+@SkipThrottle()
 @Controller({
   path: 'songs',
   scope: Scope.REQUEST
@@ -37,11 +41,13 @@ export class SongsController {
     private readonly songsService: SongsService,
     @Inject('CONNECTION')
     private connection: Connection,
+    private readonly myLoggerService: MyLoggerService
   ) {
     console.log(
       `THIS IS CONNECTION STRING ${this.connection.CONNECTION_STRING}`,
     );
   }
+
   @Post()
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtArtistGuard)
@@ -58,12 +64,15 @@ export class SongsController {
     console.log(req.user, "req.user => SongsController");
     return this.songsService.create(createSongDTO);
   }
+
+  @SkipThrottle({ default: false })
   @Get()
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   @ApiQuery({ name: 'orderBy', required: false, type: String })
   @ApiQuery({ name: 'order', required: false, enum: ['ASC', 'DESC'], example: 'DESC' })
   findAll(
+    @Ip() ip: string,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe)
     page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
@@ -71,6 +80,7 @@ export class SongsController {
     @Query('orderBy') orderBy?: string,
     @Query('order', new DefaultValuePipe('DESC')) order: 'ASC' | 'DESC' = 'DESC',
   ): Promise<PaginatedResult<SongDocument>> {
+    //this.myLoggerService.log(`Request for ALL Songs\t${ip}`, SongsController.name);
     try {
       limit = limit > 100 ? 100 : limit;
       //return this.songsService.findAll();
@@ -89,6 +99,9 @@ export class SongsController {
       });
     }
   }
+
+  @Throttle({'short': { ttl: 1000, limit: 1 }}) // named throttle override global 'short' throttle for this route
+  //@Throttle({'short': { ttl: 1000, limit: 1 }}) // default throttle, custom throttle for this route
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SongDocument> {
     const song = await this.songsService.findOne(id);
