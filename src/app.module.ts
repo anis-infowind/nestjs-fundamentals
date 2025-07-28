@@ -27,7 +27,7 @@ import { mongoDBConfig } from './db/mongodb-config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MyLoggerModule } from './my-logger/my-logger.module';
-import { AllExceptionsFilter } from 'all-exceptions.filter';
+import { AllExceptionsFilter } from './common/exception/all-exceptions.filter';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
