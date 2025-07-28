@@ -35,7 +35,7 @@ const proConfig = { port: 4000 };
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`],
       isGlobal: true,
       load: [configuration],
       validate: validate,
