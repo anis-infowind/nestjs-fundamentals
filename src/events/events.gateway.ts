@@ -1,5 +1,6 @@
 import { OnModuleInit } from '@nestjs/common';
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import { Observable, of } from 'rxjs';
 import { Server } from 'socket.io';
 
 @WebSocketGateway({
@@ -24,8 +25,12 @@ export class EventsGateway implements OnModuleInit {
   handleMessage(
     @MessageBody()
     data: any
-  ): void {
+  ): Observable<WsResponse<any>> {
     console.log('Message receieved from the client ');
     console.log(data);
+    return of({
+      event: 'message',
+      data: 'MESSAGE RETURNED FROM SERVER: HELLO',
+    });
   }
 }
