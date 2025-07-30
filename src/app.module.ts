@@ -24,11 +24,16 @@ import { configuration } from './config/configuration';
 import { validate } from './config/validation';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongoDBConfig } from './db/mongodb-config';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MyLoggerModule } from './my-logger/my-logger.module';
 import { AllExceptionsFilter } from './common/exception/all-exceptions.filter';
 import { EventsModule } from './events/events.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { AlbumsModule } from './albums/albums.module';
+import { GqlThrottlerGuard } from './common/graphql/gql-throttler.guard';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -60,6 +65,14 @@ const proConfig = { port: 4000 };
         limit: 100
       }
     ]),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      typePaths: ['./**/*.graphql'],
+      definitions: {
+        path: join(process.cwd(), 'src/graphql.ts'),
+        outputAs: 'class',
+      },
+    }),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
@@ -91,6 +104,7 @@ const proConfig = { port: 4000 };
     SeedModule,
     MyLoggerModule,
     EventsModule,
+    AlbumsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -111,7 +125,7 @@ const proConfig = { port: 4000 };
     },
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard
+      useClass: GqlThrottlerGuard
     },
     {
       provide: APP_FILTER,
