@@ -72,6 +72,7 @@ const proConfig = { port: 4000 };
         path: join(process.cwd(), 'src/graphql.ts'),
         outputAs: 'class',
       },
+      context: ({ req }) => ({ req })
     }),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
