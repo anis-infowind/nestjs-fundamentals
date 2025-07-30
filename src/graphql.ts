@@ -35,4 +35,8 @@ export abstract class IMutation {
     abstract deleteAlbum(id: string): boolean | Promise<boolean>;
 }
 
+export abstract class ISubscription {
+    abstract albumCreated(): Album | Promise<Album>;
+}
+
 type Nullable<T> = T | null;
