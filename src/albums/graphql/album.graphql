@@ -21,3 +21,7 @@ type Mutation {
   updateAlbum(id: ID!, input: UpdateAlbumInput!): Album!
   deleteAlbum(id: ID!): Boolean!
 }
+
+type Subscription {
+  albumCreated: Album!
+}
