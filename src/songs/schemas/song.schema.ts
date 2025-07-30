@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+const paginate = (mongoosePaginate as any).default || mongoosePaginate;
 export type SongDocument = HydratedDocument<Song>; //1.
 
 @Schema()
@@ -25,4 +26,4 @@ export class Song {
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);
-SongSchema.plugin(mongoosePaginate);
+SongSchema.plugin(paginate);

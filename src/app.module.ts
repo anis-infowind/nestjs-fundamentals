@@ -28,6 +28,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MyLoggerModule } from './my-logger/my-logger.module';
 import { AllExceptionsFilter } from './common/exception/all-exceptions.filter';
+import { EventsModule } from './events/events.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -89,6 +90,7 @@ const proConfig = { port: 4000 };
     ArtistsModule,
     SeedModule,
     MyLoggerModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [
