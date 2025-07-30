@@ -108,6 +108,19 @@ $ pnpm migration:run
 $ pnpm migration:revert
 ```
 
+## GraphQL
+In package.json add the following scripts for creating typings
+
+```bash
+"generate:typings": "ts-node generate-typings.ts"
+```
+Command to generate typings
+```bash
+$ pnpm generate:typings
+```
+Playground url for graphql after running the application
+`http://localhost:3000/graphql`
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:

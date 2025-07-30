@@ -23,12 +23,16 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:generate": "npm run typeorm -- -d ./src/db/data-source.ts migration:generate ./src/db/migrations/$npm_config_name",
     "migration:run": "npm run typeorm -- -d ./src/db/data-source.ts migration:run",
-    "migration:revert": "npm run typeorm -- -d ./src/db/data-source.ts migration:revert"
+    "migration:revert": "npm run typeorm -- -d ./src/db/data-source.ts migration:revert",
+    "generate:typings": "ts-node generate-typings.ts"
   },
   "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "@nestjs/apollo": "^13.1.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/graphql": "^13.1.0",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^11.0.3",
@@ -45,6 +49,7 @@
     "core": "^1.0.113",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "graphql": "^16.11.0",
     "mongoose": "^8.16.4",
     "mongoose-paginate-v2": "^1.9.1",
     "mysql2": "^3.14.1",
@@ -58,6 +63,7 @@
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.1",
     "speakeasy": "^2.0.0",
+    "ts-morph": "^24.0.0",
     "typeorm": "^0.3.25",
     "uuid": "^11.1.0"
   },
