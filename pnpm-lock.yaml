@@ -44,6 +44,9 @@ importers:
       '@nestjs/platform-socket.io':
         specifier: ^11.1.5
         version: 11.1.5(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/websockets@11.1.5)(rxjs@7.8.2)
+      '@nestjs/schedule':
+        specifier: ^6.0.0
+        version: 6.0.0(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.5)
       '@nestjs/swagger':
         specifier: ^11.2.0
         version: 11.2.0(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.5)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)
@@ -1120,6 +1123,12 @@ packages:
       '@nestjs/websockets': ^11.0.0
       rxjs: ^7.1.0
 
+  '@nestjs/schedule@6.0.0':
+    resolution: {integrity: sha512-aQySMw6tw2nhitELXd3EiRacQRgzUKD9mFcUZVOJ7jPLqIBvXOyvRWLsK9SdurGA+jjziAlMef7iB5ZEFFoQpw==}
+    peerDependencies:
+      '@nestjs/common': ^10.0.0 || ^11.0.0
+      '@nestjs/core': ^10.0.0 || ^11.0.0
+
   '@nestjs/schematics@11.0.5':
     resolution: {integrity: sha512-T50SCNyqCZ/fDssaOD7meBKLZ87ebRLaJqZTJPvJKjlib1VYhMOCwXYsr7bjMPmuPgiQHOwvppz77xN/m6GM7A==}
     peerDependencies:
@@ -1489,6 +1498,9 @@ packages:
 
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
+
+  '@types/luxon@3.6.2':
+    resolution: {integrity: sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==}
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
@@ -2220,6 +2232,10 @@ packages:
 
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
+  cron@4.3.0:
+    resolution: {integrity: sha512-ciiYNLfSlF9MrDqnbMdRWFiA6oizSF7kA1osPP9lRzNu0Uu+AWog1UKy7SkckiDY2irrNjeO6qLyKnXC8oxmrw==}
+    engines: {node: '>=18.x'}
 
   cross-inspect@1.0.1:
     resolution: {integrity: sha512-Pcw1JTvZLSJH83iiGWt6fRcT+BjZlCDRVwYLbUcHzv/CRpB7r0MlSrGbIyQvVSNyGnbt7G4AXuyCiDR3POvZ1A==}
@@ -3387,6 +3403,10 @@ packages:
   lru.min@1.1.2:
     resolution: {integrity: sha512-Nv9KddBcQSlQopmBHXSsZVY5xsdlZkdH/Iey0BlcBYggMd4two7cZnKOK9vmy3nY0O5RGH99z1PCeTpPqszUYg==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
+
+  luxon@3.6.1:
+    resolution: {integrity: sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==}
+    engines: {node: '>=12'}
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -5928,6 +5948,12 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@nestjs/schedule@6.0.0(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.5)':
+    dependencies:
+      '@nestjs/common': 11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 11.1.5(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.5)(@nestjs/websockets@11.1.5)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      cron: 4.3.0
+
   '@nestjs/schematics@11.0.5(chokidar@4.0.3)(typescript@5.8.3)':
     dependencies:
       '@angular-devkit/core': 19.2.6(chokidar@4.0.3)
@@ -6300,6 +6326,8 @@ snapshots:
       '@types/node': 24.1.0
 
   '@types/long@4.0.2': {}
+
+  '@types/luxon@3.6.2': {}
 
   '@types/methods@1.1.4': {}
 
@@ -7184,6 +7212,11 @@ snapshots:
       - ts-node
 
   create-require@1.1.1: {}
+
+  cron@4.3.0:
+    dependencies:
+      '@types/luxon': 3.6.2
+      luxon: 3.6.1
 
   cross-inspect@1.0.1:
     dependencies:
@@ -8538,6 +8571,8 @@ snapshots:
   lru-cache@7.18.3: {}
 
   lru.min@1.1.2: {}
+
+  luxon@3.6.1: {}
 
   magic-string@0.30.17:
     dependencies:

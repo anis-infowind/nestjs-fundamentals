@@ -36,6 +36,8 @@ import { AlbumsModule } from './albums/albums.module';
 import { GqlThrottlerGuard } from './common/graphql/gql-throttler.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskService } from './task/task.service';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -78,6 +80,7 @@ const proConfig = { port: 4000 };
       context: ({ req }) => ({ req }),
       installSubscriptionHandlers: true,
     }),
+    ScheduleModule.forRoot(),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
@@ -137,7 +140,8 @@ const proConfig = { port: 4000 };
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
-    }
+    },
+    TaskService
   ],
 })
 export class AppModule implements NestModule {
