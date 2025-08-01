@@ -118,6 +118,26 @@ Command to generate typings
 ```bash
 $ pnpm generate:typings
 ```
+## Prisma Configuration
+1. Pull MongoDB Schema
+
+```bash
+# Pulls the current MongoDB schema and writes it to your schema.prisma.
+$ pnpm db:pull
+```
+2. Push MongoDB Schema
+
+```bash
+# Push the schema from prisma.schema to MongoDB for nes changes.
+$ pnpm db:push
+```
+2. Generate Prisma Types
+
+```bash
+# Push the schema from prisma.schema to MongoDB for nes changes.
+$ pnpm db:generate
+```
+
 Playground url for graphql after running the application
 `http://localhost:3000/graphql`
 

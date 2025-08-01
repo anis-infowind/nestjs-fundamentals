@@ -34,6 +34,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AlbumsModule } from './albums/albums.module';
 import { GqlThrottlerGuard } from './common/graphql/gql-throttler.guard';
+import { PrismaModule } from './prisma/prisma.module';
+import { PostsModule } from './posts/posts.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -47,7 +49,8 @@ const proConfig = { port: 4000 };
       validate: validate,
     }),
     // Mongodb Connection
-    MongooseModule.forRootAsync(mongoDBConfig),
+    // Enable if you are not using Prisma
+    //MongooseModule.forRootAsync(mongoDBConfig),
     ThrottlerModule.forRoot([
       {
         name: 'short',
@@ -98,15 +101,17 @@ const proConfig = { port: 4000 };
     //   entities: [Song, User, Artist, Playlist],
     //   synchronize: true, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
     // }),
-    SongsModule,
-    PlayListsModule,
-    AuthModule,
-    UsersModule,
-    ArtistsModule,
-    SeedModule,
+    //SongsModule,
+    //PlayListsModule,
+    //AuthModule,
+    //UsersModule,
+    //ArtistsModule,
+    //SeedModule,
     MyLoggerModule,
     EventsModule,
-    AlbumsModule,
+    PrismaModule,
+    PostsModule,
+    //AlbumsModule,
   ],
   controllers: [AppController],
   providers: [
