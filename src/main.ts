@@ -27,8 +27,8 @@ async function bootstrap() {
   /**
    * You can enable the seeding here
    */
-  const seedService = app.get(SeedService);
-  await seedService.seedMongoDB();
+  //const seedService = app.get(SeedService);
+  //await seedService.seedMongoDB();
 
   ///......
   //Configure the swagger module here
