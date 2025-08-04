@@ -40,6 +40,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TaskService } from './task/task.service';
 import { BullModule } from '@nestjs/bullmq';
 import { AudioModule } from './audio/audio.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -89,6 +90,7 @@ const proConfig = { port: 4000 };
         port: 6379
       }
     }),
+    EventEmitterModule.forRoot(),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
