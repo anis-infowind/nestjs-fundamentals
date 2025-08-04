@@ -134,7 +134,7 @@ $ pnpm db:push
 2. Generate Prisma Types
 
 ```bash
-# Push the schema from prisma.schema to MongoDB for nes changes.
+# Generate schema types
 $ pnpm db:generate
 ```
 
