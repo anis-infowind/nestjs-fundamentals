@@ -41,6 +41,8 @@ import { TaskService } from './task/task.service';
 import { BullModule } from '@nestjs/bullmq';
 import { AudioModule } from './audio/audio.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { FileController } from './file/file.controller';
+import { FileModule } from './file/file.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -125,6 +127,7 @@ const proConfig = { port: 4000 };
     PrismaModule,
     PostsModule,
     AudioModule,
+    FileModule,
     //AlbumsModule,
   ],
   controllers: [AppController],
