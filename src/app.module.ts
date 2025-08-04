@@ -36,6 +36,13 @@ import { AlbumsModule } from './albums/albums.module';
 import { GqlThrottlerGuard } from './common/graphql/gql-throttler.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskService } from './task/task.service';
+import { BullModule } from '@nestjs/bullmq';
+import { AudioModule } from './audio/audio.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { FileController } from './file/file.controller';
+import { FileModule } from './file/file.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -78,6 +85,14 @@ const proConfig = { port: 4000 };
       context: ({ req }) => ({ req }),
       installSubscriptionHandlers: true,
     }),
+    ScheduleModule.forRoot(),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379
+      }
+    }),
+    EventEmitterModule.forRoot(),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
@@ -111,6 +126,8 @@ const proConfig = { port: 4000 };
     EventsModule,
     PrismaModule,
     PostsModule,
+    AudioModule,
+    FileModule,
     //AlbumsModule,
   ],
   controllers: [AppController],
@@ -137,7 +154,8 @@ const proConfig = { port: 4000 };
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
-    }
+    },
+    TaskService
   ],
 })
 export class AppModule implements NestModule {
