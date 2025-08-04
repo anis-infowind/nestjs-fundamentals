@@ -38,6 +38,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskService } from './task/task.service';
+import { BullModule } from '@nestjs/bullmq';
+import { AudioModule } from './audio/audio.module';
 
 const devConfig = { port: 3000 };
 const proConfig = { port: 4000 };
@@ -81,6 +83,12 @@ const proConfig = { port: 4000 };
       installSubscriptionHandlers: true,
     }),
     ScheduleModule.forRoot(),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379
+      }
+    }),
     // Postgres Connection
     //TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // Database Migration
     // TypeOrmModule.forRoot({
@@ -114,6 +122,7 @@ const proConfig = { port: 4000 };
     EventsModule,
     PrismaModule,
     PostsModule,
+    AudioModule,
     //AlbumsModule,
   ],
   controllers: [AppController],
