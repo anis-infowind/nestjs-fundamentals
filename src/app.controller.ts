@@ -1,4 +1,4 @@
-import { Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, ParseFilePipe, ParseFilePipeBuilder, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, ParseFilePipe, ParseFilePipeBuilder, Post, Req, Res, Session, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { Request as ExpressRequest } from 'express';
@@ -105,5 +105,21 @@ export class AppController {
   finndAll(@Req() req: Request) {
     console.log(req.cookies);
     return req.cookies;
+  }
+
+  @Get('session-login')
+  loginUser(@Session() session: Record<string, any>) {
+    session.user = { id: 1, username: 'Jane' };
+    return 'LoggedIn';
+  }
+
+  @Get('session-profile')
+  profile(@Session() session: Record<string, any>) {
+    const user = session.user;
+    if (user) {
+      return `Hello, ${user.username}`;
+    } else {
+      return 'Not logged in';
+    }
   }
 }
